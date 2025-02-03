@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css} " />
+        <title>Todo Application</title>
+    </head>
+    <body>
+        <div class="container">
+            <h1 class="text-center">Todo List</h1>
+            <hr />
+            <table class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Deadline</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item : ${todoItems}">
+                    <td th:text="${item.id}">item_id</td>
+                    <td th:text="${item.taskName}">item_name</td>
+                    <td th:text="${item.taskDescription}">item_description</td>
+                    <td th:text="${item.deadline}">item_deadline</td>
+                    <td>
+                        <div class="btn btn-group-sm" role="group">
+                            <a class="btn btn-info" th:href="@{/edit/{id}(id=${item.id})}">Edit</a>
+                            <a class="btn btn-danger" th:href="@{/delete/{id}(id=${item.id})}">Remove</a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
+        <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.min.js}"></script>
+    </body>
+</html>
