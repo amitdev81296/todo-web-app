@@ -1,8 +1,6 @@
 package ch.cern.todo.models;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.Instant;
 
@@ -32,6 +30,10 @@ public class Task {
         return id;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public String getTaskName() {
         return taskName;
     }
@@ -49,4 +51,15 @@ public class Task {
         return "Task [taskId=" + id + ", taskName=" + taskName + ", taskDescription=" + taskDescription + "]";
     }
 
+    public void setTaskDescription(String taskDescription) {
+        this.taskDescription = taskDescription;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
+    }
+
+    public void setDeadline(Instant deadline) {
+        this.deadline = deadline;
+    }
 }
