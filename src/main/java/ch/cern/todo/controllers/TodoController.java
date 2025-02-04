@@ -37,6 +37,18 @@ public class TodoController {
         return modelAndView;
     }
 
+    @PostMapping("/todo")
+    public String createTask(@Valid Task task, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "add-todo-item";
+        }
+        task.setTaskName(task.getTaskName());
+        task.setTaskDescription(task.getTaskDescription());
+        task.setDeadline(task.getDeadline());
+        taskRepository.save(task);
+        return "redirect:/";
+    }
+
     @PostMapping("/todo/{id}")
     public String updateTask(@PathVariable("id") long id, @Valid Task task, BindingResult bindingResult, Model model) {
         if(bindingResult.hasErrors()) {

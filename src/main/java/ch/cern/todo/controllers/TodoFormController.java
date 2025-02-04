@@ -18,6 +18,11 @@ public class TodoFormController {
     @Autowired
     private TaskRepository taskRepository;
 
+    @GetMapping("/create-todo")
+    public String showCreateForm(Task task) {
+        return "add-todo-item";
+    }
+
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable("id") long id, Model model) {
         Task task = taskRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Task id: " + id + " not found"));
