@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css} " />
+    <title>Todo Application</title>
+</head>
+<body>
+<div class="container">
+    <div class="col-md-6">
+        <h5>To Do Manager</h5>
+        <br>
+        <h6>Please enter your details to signup.</h6>
+        <br>
+        <form action="#" method="POST">
+            <div class="form-group">
+                <label for="firstname">First Name</label>
+                <input class="form-control" type="text" id="firstname" name="firstname">
+            </div>
+            <div class="form-group">
+                <label for="lastname">Last Name</label>
+                <input class="form-control" type="text" id="lastname" name="lastname">
+            </div>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input class="form-control" type="text" id="username" name="username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input class="form-control" type="password" id="password" name="password">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input class="form-control" type="text" id="email" name="email">
+            </div>
+            <br><br>
+            <p th:text="${error}" style="color:indianred"></p>
+            <button type="submit" class="btn btn-success" th:formaction="@{/signup}" th:formmethod="post">Signup</button>
+            <button type="submit" class="btn btn-success" th:formaction="@{/login}" th:formmethod="get">Login</button>
+        </form>
+    </div>
+</div>
+</body>

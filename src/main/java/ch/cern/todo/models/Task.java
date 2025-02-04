@@ -25,6 +25,10 @@ public class Task {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public Category getCategory() {
         return category;
     }
@@ -35,10 +39,11 @@ public class Task {
 
     public Task() {}
 
-    public Task(String name, String description, LocalDate deadline, Category category) {
+    public Task(String name, String description, LocalDate deadline, Category category, User user) {
         this.taskName = name;
         this.taskDescription = description;
         this.deadline = deadline;
+        this.user = user;
     }
 
     public Long getId() {
@@ -76,5 +81,13 @@ public class Task {
 
     public void setDeadline(LocalDate deadline) {
         this.deadline = deadline;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
