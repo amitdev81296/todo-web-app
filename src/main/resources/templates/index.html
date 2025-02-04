@@ -17,6 +17,7 @@
                     <th>Id</th>
                     <th>Name</th>
                     <th>Description</th>
+                    <th>Category</th>
                     <th>Deadline</th>
                     <th>Actions</th>
                 </tr>
@@ -26,6 +27,7 @@
                     <td th:text="${item.id}">item_id</td>
                     <td th:text="${item.taskName}">item_name</td>
                     <td th:text="${item.taskDescription}">item_description</td>
+                    <td th:text="${item.category != null ? item.category.categoryName: ''}">item_category</td>
                     <td th:text="${item.deadline}">item_deadline</td>
                     <td>
                         <div class="btn btn-group-sm" role="group">

@@ -2,7 +2,9 @@ package ch.cern.todo.models;
 
 import jakarta.persistence.*;
 
+import java.sql.Date;
 import java.time.Instant;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "task")
@@ -16,11 +18,24 @@ public class Task {
 
     private String taskDescription;
 
-    private Instant deadline;
+    @Column(columnDefinition = "DATE")
+    private LocalDate deadline;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 
     public Task() {}
 
-    public Task(String name, String description, Instant deadline) {
+    public Task(String name, String description, LocalDate deadline, Category category) {
         this.taskName = name;
         this.taskDescription = description;
         this.deadline = deadline;
@@ -42,7 +57,7 @@ public class Task {
         return taskDescription;
     }
 
-    public Instant getDeadline() {
+    public LocalDate getDeadline() {
         return deadline;
     }
 
@@ -59,7 +74,7 @@ public class Task {
         this.taskName = taskName;
     }
 
-    public void setDeadline(Instant deadline) {
+    public void setDeadline(LocalDate deadline) {
         this.deadline = deadline;
     }
 }

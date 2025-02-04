@@ -13,15 +13,26 @@
             <form action="#" th:action="@{/todo/{id}(id=${task.id})}" th:object="${task}" method="POST">
                 <div class="form-group">
                     <label for="taskName">Name</label>
-                    <input class="form-control" type="text" th:field="*{taskName}" placeholder="Add a name">
+                    <input id="taskName" class="form-control" type="text" th:field="*{taskName}" placeholder="Add a name">
                 </div>
                 <div class="form-group">
                     <label for="taskDescription">Description</label>
-                    <input class="form-control" type="text" th:field="*{taskDescription}" placeholder="Add a description">
+                    <input id="taskDescription" class="form-control" type="text" th:field="*{taskDescription}" placeholder="Add a description">
+                </div>
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select name="categoryId" id="category">
+                        <option value="" th:selected="${task.category == null}">-- Select Category --</option>
+                        <option th:each="category : ${categories}"
+                                th:value="${category.id}"
+                                th:text="${category.categoryName}"
+                                th:selected="${task.category != null and task.category.id == category.id}">
+                        </option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="deadline">Name</label>
-                    <input class="form-control" type="text" th:field="*{deadline}" placeholder="Add a deadline">
+                    <input class="form-control" type="date" th:field="*{deadline}" id="deadline">
                 </div>
                 <br>
                 <button class="btn btn-default" type="submit">Update</button>
