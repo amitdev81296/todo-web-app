@@ -4,6 +4,7 @@ import ch.cern.todo.models.Category;
 import ch.cern.todo.models.Task;
 import ch.cern.todo.repositories.CategoryRepository;
 import ch.cern.todo.repositories.TaskRepository;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,12 @@ public class TodoFormController {
         Task task = taskRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Task id: " + id + " not found"));
         taskRepository.delete(task);
         return "redirect:/";
+    }
+
+    @GetMapping("/logout")
+    public String logout(Model model) {
+        model.addAttribute("message", "You have been logged out");
+        return "login";
     }
 
 }
