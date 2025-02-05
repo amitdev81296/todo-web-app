@@ -42,6 +42,7 @@ public class Task {
         this.taskDescription = description;
         this.deadline = deadline;
         this.user = user;
+        this.category = category;
     }
 
     public Long getId() {
