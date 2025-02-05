@@ -1,11 +1,13 @@
 package ch.cern.todo.controllers;
 
 import ch.cern.todo.models.Task;
+import ch.cern.todo.models.User;
 import ch.cern.todo.repositories.CategoryRepository;
 import ch.cern.todo.repositories.TaskRepository;
+import ch.cern.todo.repositories.UserRepository;
+import ch.cern.todo.service.TaskService;
 import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Null;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,57 +30,74 @@ public class TodoController {
     private final Logger logger = LoggerFactory.getLogger(TodoController.class);
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private TaskRepository taskRepository;
 
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @GetMapping("/")
-    public ModelAndView index() {
+    @Autowired
+    private TaskService taskService;
+
+    @GetMapping("/todos/adminview")
+    public String indexAdmin(Model model) {
+        model.addAttribute("tasks", taskService.getAllTasksOrderByUser());
+        return "admin-view";
+    }
+
+    @GetMapping("/todos/{userId}")
+    public ModelAndView index(@PathVariable("userId") long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         logger.debug("Index Page");
         ModelAndView modelAndView = new ModelAndView("index");
-        List<Task> tasks = (List<Task>) taskRepository.findAll();
+        List<Task> tasks = taskService.getTasksForUser(user);
         for (Task task : tasks) {
             logger.info(String.valueOf(task.getId()));
         }
         modelAndView.addObject("todoItems", tasks);
+        modelAndView.addObject("user", user);
         return modelAndView;
     }
 
-    @PostMapping("/todo")
-    public String createTask(@Valid Task task,
+    @PostMapping("/todo/{userId}")
+    public String createTask(@PathVariable("userId") long userId, @Valid Task task,
                              @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate deadline,
                              @Nullable Long categoryId, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "add-todo-item";
         }
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         task.setTaskName(task.getTaskName());
         task.setTaskDescription(task.getTaskDescription());
         task.setDeadline(deadline);
+        task.setUser(user);
         if(categoryId != null) {
             task.setCategory(categoryRepository.findById(categoryId).get());
         }
         taskRepository.save(task);
-        return "redirect:/";
+        return "redirect:/todos/" + user.getId();
     }
 
-    @PostMapping("/todo/{id}")
-    public String updateTask(@PathVariable("id") long id,
+    @PostMapping("/todo/{userId}/{taskId}")
+    public String updateTask(@PathVariable("userId") long userId, @PathVariable("taskId") long taskId,
                              @Valid Task task,
                              @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate deadline,
                              @Nullable Long categoryId, BindingResult bindingResult, Model model) {
         if(bindingResult.hasErrors()) {
-            task.setId(id);
+            task.setId(taskId);
             return "update-todo-item";
         }
-        task.setTaskName(task.getTaskName());
-        task.setDeadline(deadline);
-        task.setTaskDescription(task.getTaskDescription());
+        Task task1 = taskRepository.findById(taskId).orElseThrow(() -> new IllegalArgumentException("Task id: " + taskId + " not found"));
+        task1.setTaskName(task.getTaskName());
+        task1.setDeadline(deadline);
+        task1.setTaskDescription(task.getTaskDescription());
         if(categoryId != null) {
-            task.setCategory(categoryRepository.findById(categoryId).get());
+            task1.setCategory(categoryRepository.findById(categoryId).get());
         }
-        taskRepository.save(task);
-        return "redirect:/";
+        taskRepository.save(task1);
+        return "redirect:/todos/" + userId;
     }
 
 

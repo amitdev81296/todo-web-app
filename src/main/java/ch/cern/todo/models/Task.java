@@ -2,8 +2,6 @@ package ch.cern.todo.models;
 
 import jakarta.persistence.*;
 
-import java.sql.Date;
-import java.time.Instant;
 import java.time.LocalDate;
 
 @Entity

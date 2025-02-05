@@ -6,12 +6,37 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css} " />
         <title>Todo Application</title>
+        <script>
+            function filterTable(columnIndex, inputId) {
+                let input = document.getElementById(inputId);
+                let filter = input.value.toLowerCase();
+                let table = document.getElementById("taskTable");
+                let rows = table.getElementsByTagName("tr");
+
+                for (let i = 1; i < rows.length; i++) { // Start from 1 to skip header
+                    let cell = rows[i].getElementsByTagName("td")[columnIndex];
+                    if (cell) {
+                        let text = cell.textContent || cell.innerText;
+                        rows[i].style.display = text.toLowerCase().includes(filter) ? "" : "none";
+                    }
+                }
+            }
+        </script>
     </head>
     <body>
         <div class="container">
             <h1 class="text-center">Todo List</h1>
             <hr />
-            <table class="table table-bordered table-striped">
+            <p th:text="'Hello, ' + ${user.firstName}"></p>
+            <br>
+            <!-- Static filter only to search the table. No db query -->
+            <label>Filter by Title:</label>
+            <input class="form-control" type="text" id="titleFilter" onkeyup="filterTable(1, 'titleFilter')" placeholder="Search Task Name...">
+
+            <label>Filter by Description:</label>
+            <input class="form-control" type="text" id="descFilter" onkeyup="filterTable(2, 'descFilter')" placeholder="Search Task Description...">
+            <br>
+            <table id="taskTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
                     <th>Id</th>
@@ -31,15 +56,15 @@
                     <td th:text="${item.deadline}">item_deadline</td>
                     <td>
                         <div class="btn btn-group-sm" role="group">
-                            <a class="btn btn-info" th:href="@{/edit/{id}(id=${item.id})}">Edit</a>
-                            <a class="btn btn-danger" th:href="@{/delete/{id}(id=${item.id})}">Remove</a>
+                            <a class="btn btn-info" th:href="@{/edit/{userId}/{taskId}(taskId=${item.id}, userId=${user.id})}">Edit</a>
+                            <a class="btn btn-danger" th:href="@{/delete/{userId}/{taskId}(taskId=${item.id}, userId=${user.id})}">Remove</a>
                         </div>
                     </td>
                 </tr>
                 </tbody>
             </table>
 
-            <p><a class="btn btn-success" href="/create-todo">Add a Todo</a></p>
+            <p><a class="btn btn-success" th:href="@{/create-todo/{userId}(userId=${user.id})}">Add a Todo</a></p>
             <br><br>
             <p><a class="btn btn-danger" href="/logout">Logout</a></p>
         </div>

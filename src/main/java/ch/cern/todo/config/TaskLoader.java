@@ -1,7 +1,6 @@
 package ch.cern.todo.config;
 
 import ch.cern.todo.models.Category;
-import ch.cern.todo.models.Task;
 import ch.cern.todo.repositories.CategoryRepository;
 import ch.cern.todo.repositories.TaskRepository;
 import org.slf4j.Logger;
@@ -10,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Component

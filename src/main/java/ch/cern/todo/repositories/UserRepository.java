@@ -1,6 +1,5 @@
 package ch.cern.todo.repositories;
 
-import ch.cern.todo.models.Task;
 import ch.cern.todo.models.User;
 import org.springframework.data.repository.CrudRepository;
 

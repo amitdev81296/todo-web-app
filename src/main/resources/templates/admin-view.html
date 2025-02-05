@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css} " />
+    <title>Todo Application</title>
+    <script>
+        function filterTable(columnIndex, inputId) {
+            let input = document.getElementById(inputId);
+            let filter = input.value.toLowerCase();
+            let table = document.getElementById("taskTable");
+            let rows = table.getElementsByTagName("tr");
+
+            for (let i = 1; i < rows.length; i++) { // Start from 1 to skip header
+                let cell = rows[i].getElementsByTagName("td")[columnIndex];
+                if (cell) {
+                    let text = cell.textContent || cell.innerText;
+                    rows[i].style.display = text.toLowerCase().includes(filter) ? "" : "none";
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <h1 class="text-center">Todo List</h1>
+    <hr />
+    <p th:text="'Administrator Mode'"></p>
+    <!-- Static Filters to only search the table. No DB queries -->
+    <label>Filter by Title:</label>
+    <input class="form-control" type="text" id="titleFilter" onkeyup="filterTable(1, 'titleFilter')" placeholder="Search Task Name...">
+
+    <label>Filter by Description:</label>
+    <input class="form-control" type="text" id="descFilter" onkeyup="filterTable(2, 'descFilter')" placeholder="Search Task Description...">
+    <br>
+    <table id="taskTable" class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Deadline</th>
+            <th>User ID</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${tasks}">
+            <td th:text="${item.id}">item_id</td>
+            <td th:text="${item.taskName}">item_name</td>
+            <td th:text="${item.taskDescription}">item_description</td>
+            <td th:text="${item.category != null ? item.category.categoryName: ''}">item_category</td>
+            <td th:text="${item.deadline}">item_deadline</td>
+            <td th:text="${item.user.id}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <hr />
+    <p><a class="btn btn-danger" href="/logout">Logout</a></p>
+</div>
+
+<script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.min.js}"></script>
+</body>
+</html>

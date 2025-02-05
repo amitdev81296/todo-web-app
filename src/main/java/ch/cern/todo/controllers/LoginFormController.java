@@ -8,9 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Controller
@@ -39,7 +39,10 @@ public class LoginFormController {
     public String authenticateUser(@NotNull String username, @NotNull String password, Model model) {
         Optional<User> user = userRepository.findByUsername(username);
         if (user.isPresent()) {
-            return "redirect:/";
+            if (Objects.equals(user.get().getUserRole(), "ADMIN")) {
+                return "redirect:/todos/adminview";
+            }
+            return "redirect:/todos/" + user.get().getId();
         } else {
             model.addAttribute("error", "User does not exist!");
             return "login";
@@ -58,7 +61,7 @@ public class LoginFormController {
             return "signup";
         }
         model.addAttribute("message", "User created. Please proceed to login!");
-        return "login";
+        return "redirect:/login";
     }
 
 }

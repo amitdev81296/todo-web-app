@@ -2,9 +2,10 @@ package ch.cern.todo.controllers;
 
 import ch.cern.todo.models.Category;
 import ch.cern.todo.models.Task;
+import ch.cern.todo.models.User;
 import ch.cern.todo.repositories.CategoryRepository;
 import ch.cern.todo.repositories.TaskRepository;
-import jakarta.servlet.http.HttpSession;
+import ch.cern.todo.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,29 +26,35 @@ public class TodoFormController {
 
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-    @GetMapping("/create-todo")
-    public String showCreateForm(Task task, Model model) {
+    @GetMapping("/create-todo/{userId}")
+    public String showCreateForm(@PathVariable("userId") long userId, Task task, Model model) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         List<Category> categories = (List<Category>) categoryRepository.findAll();
         model.addAttribute("task", task);
         model.addAttribute("categories", categories);
+        model.addAttribute("user", user);
         return "add-todo-item";
     }
 
-    @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable("id") long id, Model model) {
-        Task task = taskRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Task id: " + id + " not found"));
+    @GetMapping("/edit/{userId}/{taskId}")
+    public String showEditForm(@PathVariable("userId") long userId, @PathVariable("taskId") long taskId, Model model) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        Task task = taskRepository.findById(taskId).orElseThrow(() -> new IllegalArgumentException("Task id: " + taskId + " not found"));
         List<Category> categories = (List<Category>) categoryRepository.findAll();
         model.addAttribute("task", task);
+        model.addAttribute("user", user);
         model.addAttribute("categories", categories);
         return "update-todo-item";
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteTask(@PathVariable("id") long id, Model model) {
-        Task task = taskRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Task id: " + id + " not found"));
+    @GetMapping("/delete/{userId}/{taskId}")
+    public String deleteTask(@PathVariable("userId") long userId, @PathVariable("taskId") long taskId, Model model) {
+        Task task = taskRepository.findById(taskId).orElseThrow(() -> new IllegalArgumentException("Task id: " + taskId + " not found"));
         taskRepository.delete(task);
-        return "redirect:/";
+        return "redirect:/todos/" + userId;
     }
 
     @GetMapping("/logout")

@@ -10,7 +10,10 @@
     <body>
     <div class="container">
         <div class="col-md-6">
-            <form action="#" th:action="@{/todo/{id}(id=${task.id})}" th:object="${task}" method="POST">
+            <h5>Edit Todo</h5>
+            <hr />
+            <p th:text="'Hello, ' + ${user.firstName}"></p>
+            <form action="#" th:action="@{/todo/{userId}/{taskId}(taskId=${task.id}, userId=${user.id})}" th:object="${task}" method="POST">
                 <div class="form-group">
                     <label for="taskName">Name</label>
                     <input id="taskName" class="form-control" type="text" th:field="*{taskName}" placeholder="Add a name">

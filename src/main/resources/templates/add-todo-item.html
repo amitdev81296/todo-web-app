@@ -11,7 +11,9 @@
     <div class="container">
         <div class="col-md-6">
             <h2>Add a new Todo Item</h2>
-            <form action="#" th:action="@{/todo}" th:object="${task}" method="POST">
+            <hr />
+            <p th:text="'Hello, ' + ${user.firstName}"></p>
+            <form action="#" th:action="@{/todo/{userId}(userId=${user.id})}" th:object="${task}" method="POST">
                 <div class="form-group">
                     <label for="name">Name</label>
                     <input class="form-control" type="text" th:field="*{taskName}" id="name" placeholder="Enter todo name.">

@@ -25,7 +25,10 @@
             <p th:text="${error}" style="color:indianred"></p>
             <p th:text="${message}" style="color:lightgreen"></p>
             <button type="submit" class="btn btn-success" th:formaction="@{/authenticate}" th:formmethod="post">Login</button>
-            <button type="submit" class="btn btn-success" th:formaction="@{/signup}" th:formmethod="get">Signup</button>
+        </form>
+        <hr />
+        <form action="#">
+            <button type="submit" class="btn btn-info" th:formaction="@{/signup}" th:formmethod="get">Signup</button>
         </form>
     </div>
 </div>
