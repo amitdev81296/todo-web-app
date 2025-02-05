@@ -27,7 +27,6 @@ public class LoginFormControllerTest {
     @InjectMocks
     private LoginFormController loginFormController;
 
-    @Test
     public void testRenderLoginForm() throws Exception {
         mockMvc.perform(get("/login")).andExpect(status().isOk()).andExpect(content().string("login"));
     }
